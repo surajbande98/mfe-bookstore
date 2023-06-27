@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './components/home/home.component';
+import { loadRemoteModule } from '@angular-architects/module-federation';
 
 const routes: Routes = [
   {
@@ -9,12 +10,22 @@ const routes: Routes = [
     pathMatch:'full'
   },
   {
-    path:'books',
-    loadChildren:()=>import('bookMfe/Module').then(m=>m.BookModule)
+    path: 'books',
+    loadChildren: () => loadRemoteModule({
+      type: 'manifest',
+      remoteName: 'bookMfe',
+      exposedModule: './Module'
+    })
+      .then(m => m.BookModule)
   },
   {
-    path:'auth',
-    loadChildren:()=>import('authMfe/Module').then(m=>m.AuthModule)
+    path: 'auth',
+    loadChildren: () => loadRemoteModule({
+      type: 'manifest',
+      remoteName: 'authMfe',
+      exposedModule: './Module'
+    })
+      .then(m => m.AuthModule)
   }
 ];
 
